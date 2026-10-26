@@ -72,6 +72,7 @@
           { file: 'assets/activities/iyrc/iyrc-clip-3.mp4', poster: 'assets/activities/iyrc/iyrc-clip-3.jpg', caption: 'บังคับโดรนเข้าทำประตู' },
         ],
         photos: [
+          { file: 'assets/activities/iyrc/iyrc-cover.jpg', caption: 'Dek LAS SPU สุดปัง! ทีม NoPlan คว้ารองชนะเลิศอันดับ 2' },
           { file: 'assets/activities/iyrc/iyrc-01.jpg', caption: 'ถ้วยรางวัลรองชนะเลิศอันดับ 2' },
           { file: 'assets/activities/iyrc/iyrc-02.jpg', caption: 'ขึ้นรับรางวัลบนเวที IYRC Thailand 2026' },
           { file: 'assets/activities/iyrc/iyrc-03.jpg', caption: 'ถ่ายรูปร่วมกันบนเวทีรับรางวัล' },
