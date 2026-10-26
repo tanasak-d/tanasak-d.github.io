@@ -570,23 +570,3 @@ main { overflow-x: clip; }
 .profile { display: block; min-height: 0; padding: 120px 0; }
 .profile-grid { padding-top: 0 !important; }
 .profile-panel { margin: 0 auto; }
-
-/* เครื่องเล่นเพลง YouTube ขนาดเล็ก (มองเห็นได้ ไม่ต่ำกว่า 200×200 ตามเงื่อนไข YouTube) */
-.yt-mini {
-  position: fixed; left: 16px; bottom: 76px; z-index: 120; width: 260px; border-radius: 14px; overflow: hidden;
-  background: rgba(8, 20, 48, .88); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0, 0, 0, .45);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  opacity: 0; transform: translateY(16px); transition: opacity .3s ease, transform .3s var(--ease-out);
-}
-.yt-mini.show { opacity: 1; transform: none; }
-.yt-mini[hidden] { display: none; }
-.yt-head { display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 12px; font-size: 13px; font-weight: 600; color: var(--ice); }
-.yt-head > svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.yt-head span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.yt-close { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 10px; background: none; color: var(--muted); cursor: pointer; }
-.yt-close:hover { background: rgba(255, 255, 255, .1); color: #fff; }
-.yt-close svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
-.yt-frame { height: 200px; background: #000; }
-.yt-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
-body.intro-active .yt-mini { display: none; }
-@media (max-width: 760px) { .yt-mini { width: 220px; } }

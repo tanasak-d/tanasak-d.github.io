@@ -1,6 +1,6 @@
 /* เสียงประกอบทั้งเว็บ สังเคราะห์สดด้วย Web Audio API (ไม่มีไฟล์เสียง)
    - window.SFX.type / verified / beep / warp / boom / chime  ใช้ในฉากเปิดและปุ่มต่างๆ
-   - เพลงพื้นหลัง "เชื่อในฝัน" — Release เล่นผ่านเครื่องเล่น YouTube ขนาดเล็กมุมซ้ายล่าง
+   - เพลงพื้นหลังแนว chill electronic สดใส แต่งสดด้วยโค้ด ยิ่งเลื่อนสูงเสียงยิ่งใส (SFX.altitude)
    - ปุ่มเปิด/ปิดเสียงมุมซ้ายล่าง จำค่าที่เลือกไว้
    เบราว์เซอร์ยอมให้เล่นเสียงหลังผู้ชมกดหรือแตะครั้งแรกเท่านั้น */
 (function () {
@@ -93,76 +93,95 @@
     ambientStart: ambientStart,
     ambientStop: ambientStop,
     altitude: function (p) {                              // ยิ่งสูง เสียงยิ่งโปร่ง
-      /* เพลงจาก YouTube ปรับเสียงตามความสูงไม่ได้ */
+      if (amb) amb.filter.frequency.setTargetAtTime(1300 + p * 1800, ctx.currentTime, 0.8);
     },
     setEnabled: setEnabled
   };
 
-  /* ---------- เพลงพื้นหลัง: "เชื่อในฝัน" — Release ----------
-     เพลงมีลิขสิทธิ์ จึงเล่นผ่านเครื่องเล่น YouTube ที่มองเห็นได้ (ขนาดไม่ต่ำกว่า 200×200 ตามเงื่อนไข YouTube)
-     ไม่ดาวน์โหลดไฟล์เพลงมาไว้ในเว็บ
-     ยกเว้นตอนเปิดในเครื่อง: ถ้ามีไฟล์ assets/music/believe-inst.mp3 (ไม่ได้อัปขึ้น GitHub) จะเล่นไฟล์นั้นเบาๆ แทน ไม่มีกรอบ */
-  var YT_ID = 'SYzdWlNY0Vw', YT_VOL = 25;
-  var LOCAL_MP3 = 'assets/music/believe-inst.mp3', MP3_VOL = 0.25;
-  var mp3 = null, useMp3 = null;   // null = ยังไม่รู้ว่ามีไฟล์ไหม
+  /* ---------- เพลงพื้นหลัง: Chill electronic สดใส (แต่งสดด้วยโค้ด ไม่มีไฟล์เพลง) ----------
+     92 BPM · คอร์ด Fmaj7 → Dm9 → B♭maj7 → C6/9 · กลองเบาๆ + เบส + อาร์เปจจิโอมีเสียงสะท้อน */
+  var BPM = 92, STEP = 60 / BPM / 4;                     // โน้ตตัวละ 1/16
+  var CHORDS = [                                         // ความถี่ (Hz)
+    { root: 87.31, pad: [174.61, 220.00, 261.63, 329.63], arp: [349.23, 440.00, 523.25, 659.25, 783.99] },   // Fmaj7
+    { root: 73.42, pad: [146.83, 174.61, 220.00, 329.63], arp: [293.66, 349.23, 440.00, 523.25, 659.25] },   // Dm9
+    { root: 58.27, pad: [174.61, 233.08, 293.66, 440.00], arp: [349.23, 466.16, 587.33, 698.46, 880.00] },   // B♭maj7
+    { root: 65.41, pad: [196.00, 261.63, 329.63, 440.00], arp: [392.00, 523.25, 587.33, 659.25, 783.99] }    // C6/9
+  ];
+  var ARP = [0, -1, 2, -1, 1, 3, -1, 2, 4, -1, 2, -1, 3, 1, -1, 2];   // ลำดับโน้ตใน 1 ห้อง (-1 = เว้น)
 
-  function playMp3() {
-    if (!mp3) {
-      mp3 = new Audio(LOCAL_MP3);
-      mp3.loop = true;
-      mp3.volume = MP3_VOL;
-      mp3.addEventListener('playing', function () { useMp3 = true; });
-      mp3.addEventListener('error', function () {   // ไม่มีไฟล์ (เช่นบนเว็บออนไลน์) ใช้ YouTube แทน
-        useMp3 = false;
-        if (ytWant) { showMini(true); if (ytPlayer && ytReady) ytPlayer.playVideo(); else loadYT(); }
-      });
-    }
-    var pr = mp3.play();
-    if (pr && pr.catch) pr.catch(function () {});
+  function voice(freq, t, dur, type, vol, dest, attack) {
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + (attack || 0.008));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(dest);
+    o.start(t); o.stop(t + dur + 0.05);
   }
-  var mini = document.getElementById('ytMini');
-  var ytPlayer = null, ytReady = false, ytWant = false, ytLoading = false;
+  function hit(t, dur, vol, type, freq, dest) {          // เสียงกลองจาก noise
+    var src = noise(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    f.type = type; f.frequency.value = freq; f.Q.value = 0.8;
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(f); f.connect(g); g.connect(dest);
+    src.start(t, Math.random()); src.stop(t + dur + 0.02);
+  }
+  function kick(t, dest) {
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.22);
+    g.gain.setValueAtTime(0.7, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
+    o.connect(g); g.connect(dest); o.start(t); o.stop(t + 0.35);
+  }
 
-  function showMini(show) {
-    if (!mini) return;
-    if (show) { mini.hidden = false; requestAnimationFrame(function () { mini.classList.add('show'); }); }
-    else { mini.classList.remove('show'); setTimeout(function () { if (!ytWant) mini.hidden = true; }, 350); }
+  function scheduleStep(a, step, t) {
+    var bar = Math.floor(step / 16) % CHORDS.length, s = step % 16, ch = CHORDS[bar];
+    if (s === 0) ch.pad.forEach(function (f, i) {         // คอร์ดยาวทั้งห้อง
+      voice(f, t, STEP * 16 + 0.6, i % 2 ? 'sine' : 'triangle', 0.05, a.pad, 0.35);
+      voice(f * 1.003, t, STEP * 16 + 0.6, 'sine', 0.025, a.pad, 0.4);
+    });
+    if (s === 0 || s === 6 || s === 8 || s === 14) voice(ch.root, t, STEP * (s === 6 || s === 14 ? 2 : 3.5), 'sine', 0.22, a.bus);   // เบส
+    if (s === 0 || s === 8 || (s === 10 && bar % 2)) kick(t, a.drums);
+    if (s === 4 || s === 12) hit(t, 0.18, 0.22, 'bandpass', 1700, a.drums);          // แคลป
+    if (s % 2 === 0) hit(t + (s % 4 === 2 ? STEP * 0.12 : 0), 0.05, s % 4 === 2 ? 0.09 : 0.05, 'highpass', 7500, a.drums);   // ไฮแฮท (สวิงนิดๆ)
+    var n = ARP[s];
+    if (n >= 0 && !(bar === 3 && s > 11)) voice(ch.arp[n], t, 0.32, 'triangle', 0.06, a.lead);
   }
-  function loadYT() {
-    if (ytLoading) return;
-    ytLoading = true;
-    window.onYouTubeIframeAPIReady = function () {
-      ytPlayer = new window.YT.Player('ytPlayer', {
-        width: '100%', height: '100%', videoId: YT_ID,
-        playerVars: { autoplay: 1, loop: 1, playlist: YT_ID, rel: 0, playsinline: 1, modestbranding: 1 },
-        events: {
-          onReady: function (e) { ytReady = true; e.target.setVolume(YT_VOL); if (ytWant) e.target.playVideo(); else e.target.pauseVideo(); }
-        }
-      });
-    };
-    var s = document.createElement('script');
-    s.src = 'https://www.youtube.com/iframe_api';
-    s.onerror = function () { ytWant = false; showMini(false); };   // โหลด YouTube ไม่ได้ เว็บยังใช้งานได้ตามปกติ
-    document.head.appendChild(s);
-  }
+
   function ambientStart() {
-    if (enabled !== true || !mini) return;
-    ytWant = true;
-    amb = true;
-    if (useMp3 !== false) playMp3();
-    else { showMini(true); if (ytPlayer && ytReady) ytPlayer.playVideo(); else loadYT(); }
+    if (!on() || amb) return;
+    var t0 = ctx.currentTime + 0.1;
+    var out = ctx.createGain();
+    out.gain.setValueAtTime(0.0001, ctx.currentTime);
+    out.gain.exponentialRampToValueAtTime(0.42, ctx.currentTime + 2.5);
+    out.connect(master);
+    var bus = ctx.createGain(); bus.gain.value = 1; bus.connect(out);
+    var drums = ctx.createGain(); drums.gain.value = 0.55; drums.connect(out);
+    var filter = ctx.createBiquadFilter();                 // เปิดกว้างขึ้นตามความสูง (SFX.altitude)
+    filter.type = 'lowpass'; filter.frequency.value = 1500; filter.Q.value = 0.5;
+    var pad = ctx.createGain(); pad.gain.value = 1; pad.connect(filter); filter.connect(out);
+    var lead = ctx.createGain(); lead.gain.value = 1;
+    var delay = ctx.createDelay(1), fb = ctx.createGain(), wet = ctx.createGain();
+    delay.delayTime.value = STEP * 3; fb.gain.value = 0.32; wet.gain.value = 0.45;
+    lead.connect(filter); lead.connect(delay); delay.connect(fb); fb.connect(delay); delay.connect(wet); wet.connect(filter);
+    var a = { out: out, filter: filter, bus: bus, drums: drums, pad: pad, lead: lead, step: 0, next: t0, timer: 0 };
+    a.timer = setInterval(function () {
+      while (a.next < ctx.currentTime + 0.15) {
+        scheduleStep(a, a.step, a.next);
+        a.step++;
+        a.next += STEP;
+      }
+    }, 30);
+    amb = a;
     updateToggle();
   }
   function ambientStop() {
-    ytWant = false;
-    amb = null;
-    if (mp3) mp3.pause();
-    if (ytPlayer && ytReady) ytPlayer.pauseVideo();
-    showMini(false);
+    if (!amb || !ctx) return;
+    var a = amb; amb = null;
+    clearInterval(a.timer);
+    a.out.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.35);
+    setTimeout(function () { a.out.disconnect(); }, 2500);
     updateToggle();
   }
-  var ytClose = document.getElementById('ytClose');
-  if (ytClose) ytClose.addEventListener('click', function () { setEnabled(false); });
 
   function setEnabled(v) {
     enabled = !!v;
@@ -193,14 +212,8 @@
 
   /* สลับไปแท็บอื่นแล้วเสียงหยุด กลับมาแล้วเล่นต่อ */
   document.addEventListener('visibilitychange', function () {
-    if (!ctx && !ytPlayer && !mp3) return;
-    if (!ctx) ensure();
-    if (document.hidden) { ctx.suspend(); if (mp3) mp3.pause(); if (ytPlayer && ytReady) ytPlayer.pauseVideo(); }
-    else if (enabled === true) {
-      ctx.resume();
-      if (ytWant && useMp3) playMp3();
-      else if (ytWant && ytPlayer && ytReady) ytPlayer.playVideo();
-    }
+    if (!ctx) return;
+    if (document.hidden) ctx.suspend(); else if (enabled === true) ctx.resume();
   });
 
   window.addEventListener('intro:done', function () { if (enabled === true) ambientStart(); });
