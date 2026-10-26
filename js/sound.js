@@ -100,8 +100,26 @@
 
   /* ---------- เพลงพื้นหลัง: "เชื่อในฝัน" — Release ----------
      เพลงมีลิขสิทธิ์ จึงเล่นผ่านเครื่องเล่น YouTube ที่มองเห็นได้ (ขนาดไม่ต่ำกว่า 200×200 ตามเงื่อนไข YouTube)
-     ไม่ดาวน์โหลดไฟล์เพลงมาไว้ในเว็บ */
+     ไม่ดาวน์โหลดไฟล์เพลงมาไว้ในเว็บ
+     ยกเว้นตอนเปิดในเครื่อง: ถ้ามีไฟล์ assets/music/believe.mp3 (ไม่ได้อัปขึ้น GitHub) จะเล่นไฟล์นั้นเบาๆ แทน ไม่มีกรอบ */
   var YT_ID = 'SYzdWlNY0Vw', YT_VOL = 25;
+  var LOCAL_MP3 = 'assets/music/believe.mp3', MP3_VOL = 0.25;
+  var mp3 = null, useMp3 = null;   // null = ยังไม่รู้ว่ามีไฟล์ไหม
+
+  function playMp3() {
+    if (!mp3) {
+      mp3 = new Audio(LOCAL_MP3);
+      mp3.loop = true;
+      mp3.volume = MP3_VOL;
+      mp3.addEventListener('playing', function () { useMp3 = true; });
+      mp3.addEventListener('error', function () {   // ไม่มีไฟล์ (เช่นบนเว็บออนไลน์) ใช้ YouTube แทน
+        useMp3 = false;
+        if (ytWant) { showMini(true); if (ytPlayer && ytReady) ytPlayer.playVideo(); else loadYT(); }
+      });
+    }
+    var pr = mp3.play();
+    if (pr && pr.catch) pr.catch(function () {});
+  }
   var mini = document.getElementById('ytMini');
   var ytPlayer = null, ytReady = false, ytWant = false, ytLoading = false;
 
@@ -131,13 +149,14 @@
     if (enabled !== true || !mini) return;
     ytWant = true;
     amb = true;
-    showMini(true);
-    if (ytPlayer && ytReady) ytPlayer.playVideo(); else loadYT();
+    if (useMp3 !== false) playMp3();
+    else { showMini(true); if (ytPlayer && ytReady) ytPlayer.playVideo(); else loadYT(); }
     updateToggle();
   }
   function ambientStop() {
     ytWant = false;
     amb = null;
+    if (mp3) mp3.pause();
     if (ytPlayer && ytReady) ytPlayer.pauseVideo();
     showMini(false);
     updateToggle();
@@ -174,10 +193,14 @@
 
   /* สลับไปแท็บอื่นแล้วเสียงหยุด กลับมาแล้วเล่นต่อ */
   document.addEventListener('visibilitychange', function () {
-    if (!ctx && !ytPlayer) return;
+    if (!ctx && !ytPlayer && !mp3) return;
     if (!ctx) ensure();
-    if (document.hidden) { ctx.suspend(); if (ytPlayer && ytReady) ytPlayer.pauseVideo(); }
-    else if (enabled === true) { ctx.resume(); if (ytWant && ytPlayer && ytReady) ytPlayer.playVideo(); }
+    if (document.hidden) { ctx.suspend(); if (mp3) mp3.pause(); if (ytPlayer && ytReady) ytPlayer.pauseVideo(); }
+    else if (enabled === true) {
+      ctx.resume();
+      if (ytWant && useMp3) playMp3();
+      else if (ytWant && ytPlayer && ytReady) ytPlayer.playVideo();
+    }
   });
 
   window.addEventListener('intro:done', function () { if (enabled === true) ambientStart(); });
