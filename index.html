@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TANASAK DAMDEE · Aviation Portfolio</title>
+  <meta name="description" content="Portfolio ของ ธนศักดิ์ ดำดี (TANASAK DAMDEE) นักศึกษา Aviation Safety Management มหาวิทยาลัยศรีปทุม">
+  <meta name="theme-color" content="#020817">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TANASAK DAMDEE · Aviation Portfolio">
+  <meta property="og:description" content="Aviation Safety Management · Sripatum University">
+  <meta property="og:image" content="https://tanasak-d.github.io/assets/img/og.jpg">
+  <meta property="og:url" content="https://tanasak-d.github.io/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <script>
+    document.documentElement.classList.add('js');
+    /* กันฉากเปิดค้าง ถ้าไฟล์ intro.js โหลดไม่ได้ */
+    setTimeout(function () { if (!window.__introLoaded && document.body) document.body.classList.remove('intro-active'); }, 14000);
+  </script>
+</head>
+<body class="intro-active">
+  <a class="skip-link" href="#profile">ข้ามไปเนื้อหา</a>
+
+  <!-- ท้องฟ้าพื้นหลัง (สร้างโดย js/sky.js) -->
+  <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
+  <div id="sky" class="sky" aria-hidden="true"></div>
+  <div class="alt-hud" id="altHud" aria-hidden="true">
+    <span class="alt-end top">SPACE</span>
+    <div class="alt-track"><span class="alt-fill"></span>
+      <span class="alt-marker"><svg viewBox="0 0 24 24"><use href="#i-plane"/></svg><b id="altValue">FL000 · HOME</b></span>
+    </div>
+    <span class="alt-end bottom">GND</span>
+  </div>
+  <div class="scroll-bar" aria-hidden="true"><span></span></div>
+
+  <!-- ================= ฉากเปิด ================= -->
+  <div id="intro" class="intro" role="dialog" aria-label="ฉากเปิด">
+    <canvas id="introCanvas" aria-hidden="true"></canvas>
+    <div class="intro-gate" id="introGate">
+      <p class="gate-tag">MARCH AIR · FLIGHT PORTFOLIO</p>
+      <p class="gate-title">TANASAK DAMDEE</p>
+      <p class="gate-sub">Aviation Safety Management · Sripatum University</p>
+      <button class="btn btn-primary gate-go" id="gateSound" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg> เริ่มภารกิจ <small>เปิดเสียง</small>
+      </button>
+      <button class="gate-mute" id="gateMute" type="button">เข้าชมแบบไม่มีเสียง</button>
+    </div>
+    <pre class="intro-boot" id="introBoot" aria-hidden="true"></pre>
+    <div class="intro-count" id="introCount" aria-hidden="true"></div>
+    <div class="intro-flash" id="introFlash" aria-hidden="true"></div>
+    <button class="intro-skip" id="introSkip" type="button">ข้าม <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l7 7-7 7M12 5l7 7-7 7"/></svg></button>
+  </div>
+
+  <!-- ================= แถบนำทาง ================= -->
+  <header class="navbar-wrap">
+    <nav class="navbar" aria-label="เมนูหลัก">
+      <a class="nav-brand" href="#home" aria-label="TANASAK DAMDEE หน้าแรก">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plane"/></svg><span>MARCH</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">HOME</a></li>
+        <li><a href="#profile">PROFILE</a></li>
+        <li><a href="#education">EDUCATION</a></li>
+        <li><a href="#works">WORKS</a></li>
+        <li><a href="#activities">ACTIVITIES</a></li>
+        <li><a href="#contact">CONTACT</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="เปิดเมนู">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ================= HOME ================= -->
+    <section id="home" class="section hero" aria-labelledby="heroTitle">
+      <canvas id="heroStars" class="hero-stars" aria-hidden="true"></canvas>
+      <div class="hero-stage">
+        <div class="hero-orbits" aria-hidden="true">
+          <div class="orbit o1"><svg viewBox="0 0 24 24"><use href="#i-plane"/></svg></div>
+          <div class="orbit o2"><svg viewBox="0 0 24 24"><use href="#i-plane"/></svg></div>
+        </div>
+        <picture class="hero-photo">
+          <source media="(max-width: 760px)" srcset="assets/img/march-uniform-sm.webp">
+          <img src="assets/img/march-uniform.webp" width="804" height="1600" alt="ธนศักดิ์ ดำดี ในชุดเครื่องแบบนักศึกษาการบิน" fetchpriority="high">
+        </picture>
+      </div>
+      <h1 id="heroTitle" class="hero-title">TANASAK DAMDEE</h1>
+      <canvas id="heroName" class="hero-name" aria-hidden="true"></canvas>
+      <div class="hero-meta">
+        <p class="hero-role">AVIATION SAFETY MANAGEMENT STUDENT</p>
+        <p class="hero-org">Sripatum University <span aria-hidden="true">·</span> College of Logistics Aviation and Smart Mobility</p>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#profile">เริ่มการเดินทาง <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+        <a class="btn btn-ghost hero-ghost" href="#works">ดูผลงาน</a>
+      </div>
+    </section>
+
+    <!-- ================= PROFILE ================= -->
+    <section id="profile" class="section profile" aria-labelledby="profileName">
+      <div class="container profile-grid">
+        <span class="sec-num" aria-hidden="true">01</span>
+        <div class="profile-panel glass reveal">
+          <div class="pf-head">
+            <button class="radar" id="profilePhoto" type="button" aria-label="ดูรูปเต็มของธนศักดิ์">
+              <span class="radar-ring"></span><span class="radar-ring r2"></span>
+              <img src="assets/img/march-night-face.jpg" width="600" height="600" alt="ธนศักดิ์ ดำดี">
+              <span class="pf-zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span>
+            </button>
+            <div class="pf-title">
+              <p class="eyebrow">// FLIGHT PROFILE</p>
+              <h2 id="profileName" class="profile-name">TANASAK DAMDEE</h2>
+              <p class="profile-th">ธนศักดิ์ ดำดี</p>
+              <p class="pf-status"><span class="pf-dot" aria-hidden="true"></span>นักศึกษาปริญญาตรี (B.Sc.)</p>
+            </div>
+          </div>
+          <dl class="pf-list">
+            <div><dt><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4M14.5 10h4M14.5 13.5h3"/></svg>รหัสนักศึกษา <span>STUDENT ID</span></dt><dd class="pf-mono">67145679</dd></div>
+            <div><dt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 5l9 4.5-9 4.5z"/><path d="M7 11.6V16c0 1.2 2.2 2.5 5 2.5s5-1.3 5-2.5v-4.4M21 9.5V15"/></svg>มหาวิทยาลัย <span>UNIVERSITY</span></dt><dd>Sripatum University<small>มหาวิทยาลัยศรีปทุม</small></dd></div>
+            <div><dt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M5 20V10l7-5 7 5v10M9 20v-5h6v5M9 11h.01M15 11h.01"/></svg>คณะ <span>FACULTY</span></dt><dd>College of Logistics Aviation and Smart Mobility<small>วิทยาลัยโลจิสติกส์ การบิน และสมาร์ทโมบิลิตี้</small></dd></div>
+            <div><dt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-3 7.7-7 9.5-4-1.8-7-5.2-7-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></svg>สาขา <span>MAJOR</span></dt><dd>Aviation Safety Management<small>การจัดการความปลอดภัยการบิน</small></dd></div>
+          </dl>
+          <div class="pf-logos" aria-label="สังกัด">
+            <img src="assets/img/logo-spu-white.png" width="720" height="430" alt="Sripatum University" loading="lazy">
+            <img src="assets/img/logo-las-white.png" width="720" height="250" alt="College of Logistics Aviation and Smart Mobility" loading="lazy">
+            <img src="assets/img/logo-asm-white.png" width="720" height="333" alt="Aviation Safety Management" loading="lazy">
+          </div>
+          <div class="pf-actions">
+            <a class="btn btn-primary" href="#education">ดูประวัติการศึกษา <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+            <a class="btn btn-ghost" href="#contact">ติดต่อมาร์ช <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EDUCATION ================= -->
+    <section id="education" class="section education" aria-labelledby="eduTitle">
+      <div class="container">
+        <span class="sec-num" aria-hidden="true">02</span>
+        <p class="eyebrow">// FLIGHT PATH</p>
+        <h2 id="eduTitle" class="section-title">EDUCATION</h2>
+
+        <div class="pass" id="pass">
+          <div class="pass-main">
+            <div class="pass-top"><span>MARCH AIR · ASM</span><span>BOARDING PASS</span></div>
+            <div class="pass-route">
+              <div class="pass-from"><b>PKN</b><small>PRACHINKALAYANEE · IEP</small></div>
+              <div class="pass-line" aria-hidden="true">
+                <svg class="pass-plane" viewBox="0 0 24 24"><use href="#i-plane"/></svg>
+              </div>
+              <div class="pass-to"><b>SPU</b><small>SRIPATUM UNIVERSITY · AVIATION SAFETY MANAGEMENT</small></div>
+            </div>
+            <dl class="pass-grid">
+              <div class="wide"><dt>PASSENGER</dt><dd>TANASAK DAMDEE</dd></div>
+              <div><dt>FLIGHT</dt><dd>67145679</dd></div>
+              <div><dt>GATE</dt><dd>LAS</dd></div>
+              <div><dt>CLASS</dt><dd>AVIATION SAFETY</dd></div>
+            </dl>
+          </div>
+          <div class="pass-stub">
+            <small>SEAT</small><b>01A</b>
+            <div class="pass-bar" aria-hidden="true"></div>
+            <button class="btn btn-primary pass-board" id="passBoard" type="button">BOARD NOW</button>
+          </div>
+          <div class="pass-holo" aria-hidden="true"></div>
+        </div>
+
+        <ol class="edu-cards">
+          <li class="edu-card glass">
+            <span class="edu-code">PKN</span>
+            <p class="edu-level">มัธยมศึกษาตอนปลาย</p>
+            <h3>โรงเรียนปราจีนกัลยาณี</h3>
+            <p>ห้องเรียนพิเศษภาษาอังกฤษ (IEP)</p>
+            <a class="edu-link" href="https://www.pkn.ac.th/mainpage" target="_blank" rel="noopener">เว็บไซต์โรงเรียน <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+          </li>
+          <li class="edu-card glass">
+            <span class="edu-code">SPU</span>
+            <p class="edu-level">ปริญญาตรี</p>
+            <h3>มหาวิทยาลัยศรีปทุม</h3>
+            <p>College of Logistics Aviation and Smart Mobility<br>สาขา Aviation Safety Management</p>
+            <a class="edu-link" href="https://www.spu.ac.th/fac/logistics/" target="_blank" rel="noopener">เว็บไซต์คณะ <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+          </li>
+        </ol>
+        <button class="btn btn-ghost pass-again" id="passAgain" type="button">ดูอีกครั้ง</button>
+      </div>
+    </section>
+
+    <!-- ================= WORKS ================= -->
+    <section id="works" class="section works" aria-labelledby="worksTitle">
+      <div class="container">
+        <span class="sec-num" aria-hidden="true">03</span>
+        <p class="eyebrow">// MISSION LOG</p>
+        <h2 id="worksTitle" class="section-title">WORKS</h2>
+        <article class="work-card glass reveal">
+          <a class="work-shot" href="https://marchhh-apron.netlify.app/" target="_blank" rel="noopener">
+            <span class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><em>marchhh-apron.netlify.app</em></span>
+            <img src="assets/img/apron.jpg" width="800" height="506" loading="lazy" alt="ภาพหน้าจอเว็บไซต์จำลองการให้บริการอากาศยาน หลุมจอดดอนเมือง">
+          </a>
+          <div class="work-body">
+            <h3>การออกแบบเว็บไซต์การจำลองการให้บริการอากาศยานของท่าอากาศยาน</h3>
+            <p>เว็บไซต์จำลองการให้บริการภาคพื้นของเครื่องบิน Airbus A320 ที่หลุมจอดท่าอากาศยานดอนเมือง (VTBD) ในรูปแบบ 3 มิติ ผู้ชมหมุน ซูม และกดดูข้อมูลรถบริการแต่ละคันได้ พร้อมไทม์ไลน์ขั้นตอนการทำงานตั้งแต่เครื่องเข้าจอด ขนสัมภาระ เติมน้ำมัน ไปจนถึงผลักถอยและออกจากหลุมจอด (Turnaround) แดชบอร์ดสถานะงาน และกระดานเที่ยวบินจำลอง จัดทำขึ้นเพื่อใช้ประกอบการเรียนการสอน</p>
+            <ul class="tags"><li>3D Simulation</li><li>Ground Handling</li><li>Airbus A320</li><li>Don Mueang (VTBD)</li></ul>
+            <a class="btn btn-primary" href="https://marchhh-apron.netlify.app/" target="_blank" rel="noopener">เปิดดูเว็บจริง <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+          </div>
+        </article>
+
+        <h3 class="works-sub">RESEARCH &amp; REPORTS <span>เอกสารรายงาน</span></h3>
+        <div class="doc-grid">
+          <article class="doc-card glass reveal">
+            <a class="doc-cover" href="assets/docs/aep-suvarnabhumi-vtbs.pdf" target="_blank" rel="noopener" aria-label="เปิดอ่านเอกสาร แผนฉุกเฉินสนามบินในเบื้องต้น ท่าอากาศยานสุวรรณภูมิ (VTBS) (PDF)">
+              <img src="assets/docs/aep-suvarnabhumi-vtbs.jpg" width="600" height="848" loading="lazy" alt="หน้าปกรายงานแผนฉุกเฉินสนามบินเบื้องต้น ท่าอากาศยานสุวรรณภูมิ">
+              <span class="doc-pages">PDF · 20 หน้า</span>
+            </a>
+            <div class="doc-body">
+              <p class="doc-meta">งานกลุ่ม 5 คน · ASM22067 Search and Rescue and Survive · 1/2568</p>
+              <h4>แผนฉุกเฉินสนามบินในเบื้องต้น ท่าอากาศยานสุวรรณภูมิ (VTBS)</h4>
+              <p class="doc-en">Basic Airport Emergency Plan (AEP) · Suvarnabhumi Int. Airport</p>
+              <p>รายงานจัดทำแผนฉุกเฉินสนามบินของท่าอากาศยานสุวรรณภูมิ ซึ่งเป็นสนามบินระดับกู้ภัยและดับเพลิง Category 10 ตามคู่มือ ICAO Doc 9137 และข้อมูลจาก eAIP Thailand ครอบคลุมขอบเขตความรับผิดชอบทั้งในและนอกเขตสนามบิน ประเภทเหตุฉุกเฉิน หน่วยงานที่เกี่ยวข้อง จำนวนและชนิดรถกู้ภัยดับเพลิง (ARFF) แผนที่สนามบินที่ใช้ทำแผน และแผนภาพโครงสร้างการติดต่อสื่อสารเมื่อเกิดเหตุ</p>
+              <ul class="tags"><li>Airport Emergency Plan</li><li>ICAO Doc 9137</li><li>ARFF Cat 10</li><li>VTBS</li></ul>
+              <a class="btn btn-ghost doc-open" href="assets/docs/aep-suvarnabhumi-vtbs.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg> เปิดอ่านเอกสาร</a>
+            </div>
+          </article>
+          <article class="doc-card glass reveal">
+            <a class="doc-cover" href="assets/docs/sms-thai-aviation-industries.pdf" target="_blank" rel="noopener" aria-label="เปิดอ่านเอกสาร แผนการจัดการด้านนิรภัย บริษัท อุตสาหกรรมการบิน จำกัด (TAI) (PDF)">
+              <img src="assets/docs/sms-thai-aviation-industries.jpg" width="600" height="848" loading="lazy" alt="หน้าปกคู่มือ Safety Management System ของ Thai Aviation Industries">
+              <span class="doc-pages">PDF · 30 หน้า</span>
+            </a>
+            <div class="doc-body">
+              <p class="doc-meta">คู่มือ SMS สำหรับงานซ่อมบำรุงอากาศยาน (AMT)</p>
+              <h4>แผนการจัดการด้านนิรภัย บริษัท อุตสาหกรรมการบิน จำกัด (TAI)</h4>
+              <p class="doc-en">Safety Management System (SMS) · Thai Aviation Industries Co., Ltd.</p>
+              <p>คู่มือระบบการจัดการด้านนิรภัยสำหรับงานซ่อมบำรุงอากาศยานของบริษัท อุตสาหกรรมการบิน จำกัด อ้างอิงแผนนิรภัยในการบินพลเรือนแห่งชาติ (SSP) ฉบับแก้ไข พ.ศ. 2566 ของ กพท. วางกรอบตาม 4 องค์ประกอบหลักของ ICAO ได้แก่ นโยบายความปลอดภัยและ Just Culture, แบบฟอร์มรายงานและการประเมินความเสี่ยง, การติดตามสมรรถนะ การตรวจติดตามภายใน และการจัดการความเปลี่ยนแปลง (MOC) ไปจนถึงการฝึกอบรมและการสื่อสารด้านความปลอดภัย</p>
+              <ul class="tags"><li>SMS 4 Pillars</li><li>SSP 2566</li><li>Just Culture</li><li>Risk Assessment</li></ul>
+              <a class="btn btn-ghost doc-open" href="assets/docs/sms-thai-aviation-industries.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg> เปิดอ่านเอกสาร</a>
+            </div>
+          </article>
+          <article class="doc-card glass reveal">
+            <a class="doc-cover" href="assets/docs/aviation-safety-management-report.pdf" target="_blank" rel="noopener" aria-label="เปิดอ่านเอกสาร รายงานการจัดการความปลอดภัยการบิน (PDF)">
+              <img src="assets/docs/aviation-safety-management-report.jpg" width="600" height="848" loading="lazy" alt="หน้าปกรายงานการจัดการความปลอดภัยการบิน">
+              <span class="doc-pages">PDF · 16 หน้า</span>
+            </a>
+            <div class="doc-body">
+              <p class="doc-meta">งานเดี่ยว · UID10667 เทคโนโลยีสารสนเทศเพื่ออาชีพและการทำงาน · 1/2569</p>
+              <h4>รายงานการจัดการความปลอดภัยการบิน</h4>
+              <p class="doc-en">Aviation Safety Management</p>
+              <p>รายงานเรียบเรียงองค์ความรู้ด้านความปลอดภัยการบิน ตั้งแต่ความหมายและวิวัฒนาการของแนวคิดความปลอดภัย กรอบมาตรฐาน ICAO ภาคผนวกที่ 19 และแผนนิรภัยแห่งชาติของไทย องค์ประกอบของระบบการจัดการด้านนิรภัย กระบวนการชี้บ่งอันตรายและเมทริกซ์ประเมินความเสี่ยง ปัจจัยมนุษย์กับแบบจำลองชีสสวิสของ James Reason วัฒนธรรมความปลอดภัยและระบบการรายงาน ไปจนถึงสถิติอุบัติเหตุการบินของโลกและแนวโน้มในอนาคต</p>
+              <ul class="tags"><li>ICAO Annex 19</li><li>Safety Risk Matrix</li><li>Human Factors</li><li>Swiss Cheese Model</li></ul>
+              <a class="btn btn-ghost doc-open" href="assets/docs/aviation-safety-management-report.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg> เปิดอ่านเอกสาร</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ACTIVITIES ================= -->
+    <section id="activities" class="section activities" aria-labelledby="actTitle">
+      <div class="container">
+        <span class="sec-num" aria-hidden="true">04</span>
+        <p class="eyebrow">// FLIGHT RECORDS</p>
+        <h2 id="actTitle" class="section-title">ACTIVITIES</h2>
+
+        <article class="act-card glass reveal" data-activity="flight-school">
+          <button class="act-cert" type="button" data-cert="assets/img/cert-flight-school.jpg" aria-label="ดูเกียรติบัตรโรงเรียนการบินแบบเต็มจอ">
+            <img src="assets/img/cert-flight-school.jpg" width="1600" height="1279" loading="lazy" alt="เกียรติบัตรหลักสูตรการยังชีพเบื้องต้น โรงเรียนการบิน">
+          </button>
+          <div class="act-body">
+            <p class="act-date">16 พ.ย. 2568</p>
+            <h3>สำเร็จการศึกษาตามหลักสูตรการยังชีพเบื้องต้น สำหรับนักศึกษาของโรงเรียนการบิน</h3>
+            <p>ผ่านการฝึกหลักสูตรการยังชีพเบื้องต้นที่โรงเรียนการบินจัดขึ้นสำหรับนักศึกษา เรียนรู้ทักษะการยังชีพและการเอาตัวรอดเบื้องต้น ซึ่งเป็นพื้นฐานสำคัญของผู้ที่จะทำงานด้านการบินและความปลอดภัย</p>
+            <div class="act-strip" data-strip="flight-school"></div>
+          </div>
+        </article>
+
+        <article class="act-card glass reveal" data-activity="bootcamp">
+          <button class="act-cert" type="button" data-cert="assets/img/cert-bootcamp.jpg" aria-label="ดูเกียรติบัตร BOOTCAMP แบบเต็มจอ">
+            <img src="assets/img/cert-bootcamp.jpg" width="1600" height="1125" loading="lazy" alt="ประกาศนียบัตรหลักสูตร BOOTCAMP AI บนโดรน โรบอท และไอโอที">
+          </button>
+          <div class="act-body">
+            <p class="act-date">9 ต.ค. 2569</p>
+            <h3>ผ่านหลักสูตรอบรมทักษะสูงเชิงปฏิบัติการ BOOTCAMP</h3>
+            <p>หลักสูตรการเขียนโปรแกรมปัญญาประดิษฐ์ (AI) บนอุปกรณ์โดรน โรบอท และไอโอทีขั้นสูง เพื่อรองรับอุตสาหกรรมป้องกันประเทศในเขตพัฒนาพิเศษภาคตะวันออก (EEC) ภายใต้อุตสาหกรรมเป้าหมาย S-Curve 11 จัดโดยสำนักงานคณะกรรมการส่งเสริมการลงทุน (BOI) ร่วมกับหน่วยงานพันธมิตรและมหาวิทยาลัยบูรพา</p>
+            <ul class="tags"><li>AI</li><li>Drone</li><li>Robotics</li><li>IoT</li></ul>
+            <div class="act-strip" data-strip="bootcamp"></div>
+          </div>
+        </article>
+
+        <article class="act-card glass reveal" data-activity="drone-soccer">
+          <button class="act-cert act-badge" type="button" data-cert="assets/img/drone-soccer.webp" data-cert-label="ASEAN Drone Soccer Tournament 2026" aria-label="ดูโลโก้ ASEAN Drone Soccer Tournament 2026 แบบเต็มจอ">
+            <img src="assets/img/drone-soccer.webp" width="572" height="632" loading="lazy" alt="โลโก้การแข่งขัน ASEAN Drone Soccer Tournament 2026">
+          </button>
+          <div class="act-body">
+            <p class="act-date">2026</p>
+            <h3>ASEAN Drone Soccer Tournament 2026</h3>
+            <p>เข้าร่วมกิจกรรมการแข่งขันโดรนซอคเกอร์ระดับอาเซียน ซึ่งจัดขึ้น ณ มหาวิทยาลัยศรีปทุม โดรนซอคเกอร์เป็นกีฬาที่ผู้เล่นบังคับโดรนซึ่งอยู่ในลูกบอลโครงกรง บินเข้าทำประตูในสนามที่ล้อมด้วยตาข่าย ต้องอาศัยทักษะการบังคับอากาศยาน การวางแผน และการทำงานเป็นทีม</p>
+            <ul class="tags"><li>Drone Piloting</li><li>Teamwork</li><li>ASEAN</li></ul>
+            <div class="act-strip" data-strip="drone-soccer"></div>
+          </div>
+        </article>
+
+        <article class="act-card glass reveal" data-activity="iyrc">
+          <button class="act-cert" type="button" data-cert="assets/activities/iyrc/iyrc-cover.jpg" data-cert-label="ทีม NoPlan คว้ารองชนะเลิศอันดับ 2 · IYRC Thailand 2026" aria-label="ดูภาพปก IYRC Thailand 2026 แบบเต็มจอ">
+            <img src="assets/activities/iyrc/iyrc-cover.jpg" width="1254" height="1254" loading="lazy" alt="ภาพประกาศผล ทีม NoPlan คว้ารางวัลรองชนะเลิศอันดับ 2 งาน IYRC Thailand 2026">
+          </button>
+          <div class="act-body">
+            <p class="act-date">2026</p>
+            <h3>International Youth Robot Competition Thailand 2026</h3>
+            <p class="act-award"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="15" r="6"/><path d="M8.5 3h7l-2 6.5M8.5 3l2 6.5M12 12.5v5M10 13.8l2-1.3"/></svg>2nd RUNNER UP · DRONE SOCCER (OPEN)</p>
+            <p>ร่วมแข่งขันในรายการ International Youth Robot Competition (IYRC) Thailand 2026 การแข่งขันหุ่นยนต์และโดรนสำหรับเยาวชนระดับนานาชาติ มาร์ชลงแข่งในนามทีม NoPlan ของวิทยาลัยโลจิสติกส์ การบิน และสมาร์ทโมบิลิตี้ (LAS SPU) ในประเภท Drone Soccer (Open) ซึ่งต้องบังคับโดรนในลูกบอลโครงกรงเข้าทำประตูแข่งกับทีมคู่แข่ง และคว้ารางวัลรองชนะเลิศอันดับ 2 (2nd Runner Up) มาได้</p>
+            <ul class="tags"><li>Drone Soccer</li><li>2nd Runner Up</li><li>Team NoPlan</li><li>IYRC 2026</li></ul>
+            <div class="act-strip" data-strip="iyrc"></div>
+          </div>
+        </article>
+
+        <article class="act-card glass reveal" data-activity="u-future">
+          <button class="act-cert" type="button" data-cert="assets/img/cert-u-future.jpg" aria-label="ดูเกียรติบัตร U-FUTURE CONNECT แบบเต็มจอ">
+            <img src="assets/img/cert-u-future.jpg" width="1600" height="1132" loading="lazy" alt="เกียรติบัตรโครงการ U-FUTURE CONNECT Youth Forum 2026">
+          </button>
+          <div class="act-body">
+            <p class="act-date">10 ก.ค. 2569</p>
+            <h3>เข้าร่วมโครงการ U-FUTURE CONNECT: Youth Forum 2026</h3>
+            <p>U-FUTURE CONNECT: Youth Forum 2026 เป็นเวทีเยาวชนที่จัดขึ้นในงาน Thai University Presidential Forum 2026 งานประชุมของผู้บริหารมหาวิทยาลัยทั่วประเทศ โดยความร่วมมือของที่ประชุมอธิการบดีแห่งประเทศไทย ที่ประชุมอธิการบดีมหาวิทยาลัยราชภัฏ ที่ประชุมอธิการบดีมหาวิทยาลัยเทคโนโลยีราชมงคล และสมาคมสถาบันอุดมศึกษาเอกชนแห่งประเทศไทย</p>
+            <p>มาร์ชเข้าร่วมกิจกรรมในนามนักศึกษามหาวิทยาลัยศรีปทุม ร่วมถ่ายทอดมุมมองของคนรุ่นใหม่ต่อการพัฒนาอุดมศึกษาเพื่ออนาคตประเทศไทย ซึ่งเป็นประสบการณ์ในการคิด สื่อสาร และแลกเปลี่ยนความคิดเห็นบนเวทีระดับประเทศ</p>
+            <ul class="tags"><li>Youth Forum</li><li>Higher Education</li><li>Thai University Presidential Forum 2026</li></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" class="section contact" aria-labelledby="contactTitle">
+      <div class="container">
+        <span class="sec-num" aria-hidden="true">05</span>
+        <p class="eyebrow">// FINAL APPROACH</p>
+        <h2 id="contactTitle" class="section-title">CONTACT</h2>
+        <div class="video-hud reveal">
+          <span class="hud-corner tl"></span><span class="hud-corner tr"></span><span class="hud-corner bl"></span><span class="hud-corner br"></span>
+          <div class="video-stage" id="videoStage"></div>
+          <div class="video-tabs" id="videoTabs" role="tablist" aria-label="เลือกคลิป"></div>
+        </div>
+        <div class="socials">
+          <a class="social" href="https://www.instagram.com/ma_verick.05/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="fill"/></svg>
+            <span><small>INSTAGRAM</small>@ma_verick.05</span>
+          </a>
+          <a class="social" href="https://www.tiktok.com/@ma_rchhh" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.8 2.4 4.6 5 4.8"/></svg>
+            <span><small>TIKTOK</small>@ma_rchhh</span>
+          </a>
+        </div>
+        <p class="thanks">THANK YOU FOR FLYING WITH MARCH</p>
+      </div>
+    </section>
+  </main>
+
+  <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" aria-label="เปิดเสียง">
+    <svg class="spk" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="wave" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+    <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+
+  <footer class="footer">© 2026 TANASAK DAMDEE · Sripatum University</footer>
+
+  <!-- ================= lightbox ================= -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="ดูรูปขยาย" hidden>
+    <button class="lb-close" id="lbClose" type="button" aria-label="ปิด"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <button class="lb-nav lb-prev" id="lbPrev" type="button" aria-label="รูปก่อนหน้า"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+    <button class="lb-nav lb-next" id="lbNext" type="button" aria-label="รูปถัดไป"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+
+  <!-- ไอคอนเครื่องบิน ใช้ซ้ำทั้งเว็บ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></symbol>
+  </svg>
+
+  <script src="content.js" defer></script>
+  <script src="js/lib.js" defer></script>
+  <script src="js/nav.js" defer></script>
+  <script src="js/sound.js" defer></script>
+  <script src="js/intro.js" defer></script>
+  <script src="js/hero.js" defer></script>
+  <script src="js/sky.js" defer></script>
+  <script src="js/boarding.js" defer></script>
+  <script src="js/media.js" defer></script>
+  <script src="js/reveal.js" defer></script>
+</body>
+</html>
