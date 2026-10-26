@@ -101,9 +101,9 @@
   /* ---------- เพลงพื้นหลัง: "เชื่อในฝัน" — Release ----------
      เพลงมีลิขสิทธิ์ จึงเล่นผ่านเครื่องเล่น YouTube ที่มองเห็นได้ (ขนาดไม่ต่ำกว่า 200×200 ตามเงื่อนไข YouTube)
      ไม่ดาวน์โหลดไฟล์เพลงมาไว้ในเว็บ
-     ยกเว้นตอนเปิดในเครื่อง: ถ้ามีไฟล์ assets/music/believe.mp3 (ไม่ได้อัปขึ้น GitHub) จะเล่นไฟล์นั้นเบาๆ แทน ไม่มีกรอบ */
+     ยกเว้นตอนเปิดในเครื่อง: ถ้ามีไฟล์ assets/music/believe-inst.mp3 (ไม่ได้อัปขึ้น GitHub) จะเล่นไฟล์นั้นเบาๆ แทน ไม่มีกรอบ */
   var YT_ID = 'SYzdWlNY0Vw', YT_VOL = 25;
-  var LOCAL_MP3 = 'assets/music/believe.mp3', MP3_VOL = 0.25;
+  var LOCAL_MP3 = 'assets/music/believe-inst.mp3', MP3_VOL = 0.25;
   var mp3 = null, useMp3 = null;   // null = ยังไม่รู้ว่ามีไฟล์ไหม
 
   function playMp3() {
