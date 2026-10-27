@@ -118,7 +118,7 @@
   /* รูปในแผง PROFILE */
   var profilePhoto = document.getElementById('profilePhoto');
   if (profilePhoto) profilePhoto.addEventListener('click', function () {
-    openLightbox([{ src: 'assets/img/march-night.jpg', caption: 'ธนศักดิ์ ดำดี' }], 0);
+    openLightbox([{ src: 'assets/img/march-profile.jpg', caption: 'ธนศักดิ์ ดำดี' }], 0);
   });
 
   /* ---------------- กิจกรรม: แถบวิดีโอ + รูป ---------------- */
